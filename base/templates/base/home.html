@@ -1,0 +1,70 @@
+{% extends 'main.html' %} {% block content %}
+
+<style>
+  .home-template {
+    display: flex;
+  }
+  .sidebar {
+    border-right: 1px solid;
+    height: 500px;
+    padding: 10px;
+  }
+  .rooms-render {
+    margin: 0px 0px 0px 20px;
+  }
+  #room-name:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<h1 style="display: inline">Home Template</h1>
+<a style="margin: 0px 0px 0px 10px" href="{% url 'create-room' %}"
+  >Create Room</a
+>
+<hr />
+
+<div class="home-template">
+  <div class="sidebar">
+    <h1>Browse Topics</h1>
+    <hr />
+    <p><a href="{% url 'home' %}">All</a></p>
+    {% for topic in topics %}
+    <p><a href="{% url 'home' %}?q={{topic.name}}">{{topic.name}}</a></p>
+    {% endfor %}
+  </div>
+  <div class="rooms-render">
+    <h4>{{room_count}} rooms available</h4>
+    {% for room in rooms %}
+    <div>
+      <h5>
+        <span>
+          <h3 style="display: inline; color: grey">@{{room.host}}</h3>
+          {% if request.user == room.host %}
+          <a
+            style="margin: 0px 0px 0px 10px"
+            href="{% url 'edit-room' room.id %}"
+            >Edit</a
+          >
+          <a
+            style="margin: 0px 0px 0px 10px"
+            href="{% url 'delete-room' room.id %}"
+            >Delete</a
+          >
+          {% endif %}
+        </span>
+        <h3 id="room-name">
+          <a
+            style="text-decoration: none; color: black"
+            href="{% url 'room' room.id %}"
+            >{{room.name}}</a
+          >
+        </h3>
+        <p>{{room.topic.name}}</p>
+      </h5>
+    </div>
+    <hr />
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock content %}
